@@ -3,6 +3,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors'); // for cross-orign requests
 const Joi = require('joi'); // this is a class
+// third-party middleware to secure the app by setting various http headers
+const helmet = require('helmet');
+//
+const morgan = require('morgan');
 
 const logger = require('./middleware/logger');
 const authentication = require('./middleware/authentication');
@@ -20,6 +24,10 @@ and either return the res to the client
 // this is a middleware 
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true})); // key=value&key=value
+app.use(helmet()); // it is a function helmet();
+
+// not in production just in development
+app.use(morgam('tiny')); // it is a function morgan();
 
 // to serve static files
 // http://localhost:3000/readme.txt
