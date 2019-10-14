@@ -1,3 +1,4 @@
+//  DEBUG=app:* nodemon app.js
 // 1 Basic requires imports for NodeJs App
 const express = require('express');
 const config = require('config');
@@ -26,6 +27,8 @@ const debug = require('debug')('app:starting');
 const logger = require('./middleware/logger');
 const authentication = require('./middleware/authentication');
 
+const genres = require('./routes/genres');
+const home = require('./routes/home');
 
 // 2 Create an instance of all the imports
 
@@ -51,6 +54,7 @@ and either return the res to the client
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true})); // key=value&key=value
 app.use(helmet()); // it is a function helmet();
+
 
 // Configuration
 debug('Application name : '+ config.get('name'));
@@ -78,89 +82,13 @@ app.use(authentication);
 // db
 dbDebugger('connecting to db .......');
 
-const genres = [
-    { id: 1, name: 'genre1' },
-    { id: 2, name: 'genre2' },
-    { id: 3, name: 'genre3' },
-    { id: 4, name: 'genre4' }
-];
 
 // 3 routes handler
 
-app.get('/', (req, res) => {
-    res.render('index', {title: "My Express App!", message: "Hello There!"})
-});
+app.use('/api/genres', genres);
+app.use('/', home);
 
 
-// my first API endpoint...
-// route handler is also a middleware 
-app.get("/api/hello",  (req, res) => {
-    res.json({ greeting: 'hello API' });
-});
-
-
-app.get("/api/genres",  (req, res) => {
-    res.send(genres);
-});
-
-app.get("/api/genres/:id",  (req, res) => {
-    const genre = genres.find(c => c.id === parseInt(req.params.id));
-    if(!genre)   return  res.status(404).send(`The genre with the id ${req.params.id} was not found`);
-    res.send(genre);
-});
-
-
-app.post('/api/genres', (req, res) => {
-    const { error } = validateGenre(req.body); // ES6 object distructuring feature
-    if (error) return  res.status(400).send(error.details[0].message); // 400 - bad request
-        
-    const genre = {
-        id: genres.length + 1,
-        name: req.body.name
-    };
-    genres.push(genre);
-    res.send(genre);
-});
-
-
-app.put('/api/genres/:id', (req, res) => {
-    // look up the genre 
-    // if not existing, return 404 - not found
-    const genre = genres.find(c => c.id === parseInt(req.params.id));
-    if (!genre) res.status(404).send(`The genre with the id ${req.params.id} was not found`)
-
-    // validate 
-    // if invalid, return 400 - bad request
-    const { error } = validateGenre(req.body); // ES6 object distructuring feature
-    if (error)  return res.status(400).send(error.details[0].message);
-
-    // Update genre
-    // Return the updated genre
-    genre.name = req.body.name;
-    res.send(genre);
-});
-
-
-app.delete('/api/genres/:id', (req, res) => {
-    // look up the genre 
-    // if not existing, return 404 - not found
-    const genre = genres.find(c => c.id === parseInt(req.params.id));
-    if (!genre) return res.status(404).send(`The genre with the id ${req.params.id} was not found`)
-
-    // Delete 
-    const index = genres.indexOf(genre);
-    genres.splice(index, 1);
-
-    // return the same genre 
-    res.send(genre);
-});  
-
-function validateGenre(genre) {
-    const schema = {
-        name: Joi.string().min(3).required()
-    };
-    return Joi.validate(genre, schema);
-}
 
 // 4 the last thing to do
 //to set the env variable use the command set PORT = 5000
