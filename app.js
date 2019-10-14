@@ -4,6 +4,10 @@ const bodyParser = require('body-parser');
 const cors = require('cors'); // for cross-orign requests
 const Joi = require('joi'); // this is a class
 
+const logger = require('./middleware/logger');
+const authentication = require('./middleware/authentication');
+
+
 // Create an instance of all the imports
 const app = module.exports = express();
 
@@ -17,18 +21,8 @@ and either return the res to the client
 app.use(bodyParser.json());
 app.use(cors());
 
-
-// custom middleware logging
-app.use((req, res, next) => {
-    console.log('loggiing middleware....');
-    next();
-});
-
-// custom middleware authenticating
-app.use((req, res, next) => {
-    console.log('authenticating middleware....');
-    next();
-});
+app.use(logger);
+app.use(authentication);
 
 const genres = [
     { id: 1, name: 'genre1' },
