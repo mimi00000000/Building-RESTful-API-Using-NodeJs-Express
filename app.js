@@ -15,6 +15,13 @@ const authentication = require('./middleware/authentication');
 // Create an instance of all the imports
 const app = module.exports = express();
 
+
+// environment 
+// if not set returns 
+// set NODE_ENV=production
+console.log(`NODE_ENV: ${process.env.NODE_ENV}`); // undefines
+console.log(`app: ${app.get('env')}`); // default value development
+
 /* a middleware or a middleware function,
 a middleware is basically a function that takes a req object  
 and either return the res to the client
@@ -27,7 +34,9 @@ app.use(express.urlencoded({ extended: true})); // key=value&key=value
 app.use(helmet()); // it is a function helmet();
 
 // not in production just in development
-app.use(morgam('tiny')); // it is a function morgan();
+if(app.get('env') === 'development') {
+    app.use(morgan('tiny')); // it is a function morgan();
+}
 
 // to serve static files
 // http://localhost:3000/readme.txt
