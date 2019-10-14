@@ -6,6 +6,14 @@ const Joi = require('joi'); // this is a class
 
 // Create an instance of all the imports
 const app = module.exports = express();
+
+/* a middleware or a middleware function,
+a middleware is basically a function that takes a req object  
+and either return the res to the client
+ or passes control to another middleware function.  */
+ // Example a json middleware (parses the request body to json object) and  route handler 
+ // request processing pipeline
+// this is a middleware 
 app.use(bodyParser.json());
 app.use(cors());
 
@@ -16,7 +24,8 @@ const genres = [
     { id: 4, name: 'genre4' }
 ];
 
-// your first API endpoint... 
+// your first API endpoint...
+// route handler is also a middleware 
 app.get("/api/hello",  (req, res) => {
     res.json({ greeting: 'hello API' });
 });
