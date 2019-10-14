@@ -19,6 +19,11 @@ and either return the res to the client
  // request processing pipeline
 // this is a middleware 
 app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true})); // key=value&key=value
+
+// to serve static files
+// http://localhost:3000/readme.txt
+app.use(express.static('public'));
 app.use(cors());
 
 // custom middelware in a seperate module
