@@ -21,6 +21,7 @@ and either return the res to the client
 app.use(bodyParser.json());
 app.use(cors());
 
+// custom middelware in a seperate module
 app.use(logger);
 app.use(authentication);
 
