@@ -6,8 +6,22 @@ const cors = require('cors'); // for cross-orign requests
 const Joi = require('joi'); // this is a class
 // third-party middleware to secure the app by setting various http headers
 const helmet = require('helmet');
-//
+// morgan module for logging purposes
 const morgan = require('morgan');
+
+// to view only the startup debugging
+// set DEBUG=app:startup
+// set DEBUG=app:db
+// to view nothing 
+// set DEBUG=
+// to view all the debug infos 
+// set DEBUG=app:startup,app:db
+// or
+// set DEBUG=app:*
+// DEBUG=app:db nodemon app.js 
+const dbDebugger = require('debug')('app:db');
+const debug = require('debug')('app:starting');
+
 
 const logger = require('./middleware/logger');
 const authentication = require('./middleware/authentication');
@@ -20,8 +34,8 @@ const app = module.exports = express();
 // environment 
 // if not set returns 
 // set NODE_ENV=production
-console.log(`NODE_ENV: ${process.env.NODE_ENV}`); // undefines
-console.log(`app: ${app.get('env')}`); // default value development
+debug(`NODE_ENV: ${process.env.NODE_ENV}`); // undefines
+debug(`app: ${app.get('env')}`); // default value development
 
 /* a middleware or a middleware function,
 a middleware is basically a function that takes a req object  
@@ -35,16 +49,16 @@ app.use(express.urlencoded({ extended: true})); // key=value&key=value
 app.use(helmet()); // it is a function helmet();
 
 // Configuration
-console.log('Application name : '+ config.get('name'));
-console.log('Mail Server : ' + config.get('mail.host'));
+debug('Application name : '+ config.get('name'));
+debug('Mail Server : ' + config.get('mail.host'));
 //get the pass from environment variable for the mail server password 
-//console.log('Mail Password : ' + config.get('mail.password'));
+// debug('Mail Password : ' + config.get('mail.password'));
 
 
 // not in production just in development
 if(app.get('env') === 'development') {
     app.use(morgan('tiny')); // it is a function morgan();
-    console.log('Morgan enabled...');
+    debug('Morgan enabled...');
 }
 
 // to serve static files
@@ -55,6 +69,10 @@ app.use(cors());
 // custom middelware in a seperate module
 app.use(logger);
 app.use(authentication);
+
+
+// db
+dbDebugger('connecting to db .......');
 
 const genres = [
     { id: 1, name: 'genre1' },
@@ -137,5 +155,5 @@ function validateGenre(genre) {
 //to set the env variable use the command set PORT = 5000
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(`listening on port ${port}`);
+    debug(`listening on port ${port}`);
 });
