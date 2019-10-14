@@ -1,4 +1,4 @@
-// Basic requires imports for NodeJs App
+// 1 Basic requires imports for NodeJs App
 const express = require('express');
 const config = require('config');
 const bodyParser = require('body-parser');
@@ -27,8 +27,12 @@ const logger = require('./middleware/logger');
 const authentication = require('./middleware/authentication');
 
 
-// Create an instance of all the imports
-const app = module.exports = express();
+// 2 Create an instance of all the imports
+
+// express instance
+const app = module.exports = express(); 
+app.set('view engine', 'pug');
+app.set('views', './views'); // default
 
 
 // environment 
@@ -81,7 +85,14 @@ const genres = [
     { id: 4, name: 'genre4' }
 ];
 
-// your first API endpoint...
+// 3 routes handler
+
+app.get('/', (req, res) => {
+    res.render('index', {title: "My Express App!", message: "Hello There!"})
+});
+
+
+// my first API endpoint...
 // route handler is also a middleware 
 app.get("/api/hello",  (req, res) => {
     res.json({ greeting: 'hello API' });
@@ -151,7 +162,7 @@ function validateGenre(genre) {
     return Joi.validate(genre, schema);
 }
 
-// the last thing to do
+// 4 the last thing to do
 //to set the env variable use the command set PORT = 5000
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
