@@ -1,5 +1,6 @@
 // Basic requires imports for NodeJs App
 const express = require('express');
+const config = require('config');
 const bodyParser = require('body-parser');
 const cors = require('cors'); // for cross-orign requests
 const Joi = require('joi'); // this is a class
@@ -33,9 +34,17 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true})); // key=value&key=value
 app.use(helmet()); // it is a function helmet();
 
+// Configuration
+console.log('Application name : '+ config.get('name'));
+console.log('Mail Server : ' + config.get('mail.host'));
+//get the pass from environment variable for the mail server password 
+console.log('Mail Server : ' + config.get('mail.password'));
+
+
 // not in production just in development
 if(app.get('env') === 'development') {
     app.use(morgan('tiny')); // it is a function morgan();
+    console.log('Morgan enabled...');
 }
 
 // to serve static files
