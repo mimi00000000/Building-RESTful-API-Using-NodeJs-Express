@@ -17,6 +17,19 @@ and either return the res to the client
 app.use(bodyParser.json());
 app.use(cors());
 
+
+// custom middleware logging
+app.use((req, res, next) => {
+    console.log('loggiing middleware....');
+    next();
+});
+
+// custom middleware authenticating
+app.use((req, res, next) => {
+    console.log('authenticating middleware....');
+    next();
+});
+
 const genres = [
     { id: 1, name: 'genre1' },
     { id: 2, name: 'genre2' },
