@@ -38,7 +38,7 @@ app.use(helmet()); // it is a function helmet();
 console.log('Application name : '+ config.get('name'));
 console.log('Mail Server : ' + config.get('mail.host'));
 //get the pass from environment variable for the mail server password 
-console.log('Mail Server : ' + config.get('mail.password'));
+//console.log('Mail Password : ' + config.get('mail.password'));
 
 
 // not in production just in development
