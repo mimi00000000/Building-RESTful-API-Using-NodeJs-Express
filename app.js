@@ -28,6 +28,7 @@ const logger = require('./middleware/logger');
 const authentication = require('./middleware/authentication');
 
 const genres = require('./routes/genres');
+const customers = require('./routes/customers');
 const home = require('./routes/home');
 
 // 2 Create an instance of all the imports
@@ -90,6 +91,7 @@ app.use(authentication);
 // 3 routes handler
 
 app.use('/api/genres', genres);
+app.use('/api/customers', customers);
 app.use('/', home);
 
 
