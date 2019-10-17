@@ -8,7 +8,7 @@ const Joi = require('joi'); // this is a class
 // third-party middleware to secure the app by setting various http headers
 const helmet = require('helmet');
 // morgan module for logging purposes
-const morgan = require('morgan');
+
 
 // to view only the startup debugging
 // set DEBUG=app:startup
@@ -34,6 +34,9 @@ const home = require('./routes/home');
 
 // express instance
 const app = module.exports = express(); 
+
+const morgan = require('morgan');
+
 app.set('view engine', 'pug');
 app.set('views', './views'); // default
 
@@ -77,10 +80,6 @@ app.use(cors());
 // custom middelware in a seperate module
 app.use(logger);
 app.use(authentication);
-
-
-// db
-dbDebugger('connecting to db .......');
 
 
 // 3 routes handler
