@@ -1,4 +1,4 @@
-const { Genre, validateGenre } = require('../models/customer');
+const { Genre, validateGenre } = require('../models/genre');
 const express = require('express');
 const router = express.Router();
 
@@ -42,7 +42,7 @@ router.put('/:id', async (req, res) => {
     // look up the genre 
     // if not existing, return 404 - not found
     // Update genre
-    const genre = await Genre.findByIdAndUpdate(req.params.id, 
+    await Genre.findByIdAndUpdate(req.params.id, 
         { name: req.body.name }, { new: true }, function (err, genre) {
             if(err) {
                 if (!genre) res.status(404).send(`The genre with the id ${req.params.id} was not found`); 

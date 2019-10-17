@@ -30,6 +30,8 @@ const authentication = require('./middleware/authentication');
 const genres = require('./routes/genres');
 const customers = require('./routes/customers');
 const home = require('./routes/home');
+const rentals = require('./routes/rentals');
+const movies = require('./routes/movies');
 
 // 2 Create an instance of all the imports
 
@@ -89,7 +91,8 @@ app.use(authentication);
 
 
 // 3 routes handler
-
+app.use('/api/movies', movies)
+app.use('/api/rentals', rentals);
 app.use('/api/genres', genres);
 app.use('/api/customers', customers);
 app.use('/', home);
