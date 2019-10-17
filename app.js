@@ -2,9 +2,9 @@
 // 1 Basic requires imports for NodeJs App
 const express = require('express');
 const config = require('config');
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors'); // for cross-orign requests
-const Joi = require('joi'); // this is a class
 // third-party middleware to secure the app by setting various http headers
 const helmet = require('helmet');
 // morgan module for logging purposes
@@ -34,6 +34,11 @@ const home = require('./routes/home');
 
 // express instance
 const app = module.exports = express(); 
+
+mongoose.connect('mongodb://localhost/vidly', { useNewUrlParser: true })
+    .then( () => dbDebugger('Connected to MongoDB 😍😍😍 ...') )
+    .catch( err => dbDebugger('Could not connect to MongoDB 🤎.............', err) );
+
 
 const morgan = require('morgan');
 
