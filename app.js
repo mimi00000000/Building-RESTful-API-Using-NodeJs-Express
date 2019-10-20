@@ -78,3 +78,8 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
     debug(`listening on port ${port}`);
 });
+
+// testing library frameworks
+// Jasmine
+// Mocha (Chai, Sinon)
+// Jest (personal choice)
