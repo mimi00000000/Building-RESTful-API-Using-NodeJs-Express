@@ -112,3 +112,44 @@ describe('registerUser', () => {
         expect(result.id).toBeGreaterThan(0);
     });
 });
+
+
+function fizzBuzz(input) {
+    if(typeof input !== 'number') throw new Error('Input should be a number.')   
+    if( (input % 3 === 0) && (input % 5 === 0) ) return 'FizzBuzz';
+    if (input % 3 === 0) return 'Fizz';
+    if (input % 5 === 0 ) return 'Buzz';
+    return input;
+}
+
+describe('fizzBuzz', () => {
+    it('not a number should throw error', () => {
+        expect(() => { fizzBuzz('hh'); }).toThrow();
+        expect(() => { fizzBuzz(null); }).toThrow();
+        expect(() => { fizzBuzz(undefined); }).toThrow();
+        expect(() => { fizzBuzz(false); }).toThrow();
+        expect(() => { fizzBuzz([]); }).toThrow();
+        expect(() => { fizzBuzz({}); }).toThrow();
+    });
+    it('9 is multiple of  3 it should return Fizz', ()=> {
+        const result = fizzBuzz(9);
+        expect(result).toBe('Fizz');
+    });
+    it('10 is multiple of 5 it should return Buzz', () => {
+        const result = fizzBuzz(10);
+        expect(result).toBe('Buzz');
+    });
+    it('15 is multiple pf 5 and 3 it should return FizzBuzz', () => {
+        const result = fizzBuzz(15);
+        expect(result).toBe('FizzBuzz');
+    });
+    it('4 is not a multiple of 3 neither 5 it should return 4', () => {
+        const result = fizzBuzz(4);
+        expect(result).toBe(4);
+    });
+
+});
+
+
+// a mock function or a fake function
+
