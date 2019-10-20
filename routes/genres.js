@@ -61,7 +61,7 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', [auth, admin], async (req, res) => {
     // look up the genre 
     // if not existing, return 404 - not found
-    const genre = await Genre.findByIdAndDelete(req.params.id, function(err, genre) {
+    await Genre.findByIdAndDelete(req.params.id, function(err, genre) {
         if(err) {
             if (!genre) return res.status(404).send(`The genre with the id ${req.params.id} was not found`);
         }
