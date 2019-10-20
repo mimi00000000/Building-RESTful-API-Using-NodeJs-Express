@@ -1,15 +1,13 @@
 //  DEBUG=app:* nodemon app.js
 // 1 Basic requires imports for NodeJs App
+const winston = require('winston');
+const Joi = require('joi');
+Joi.objectId = require('joi-objectid')(Joi);
 const express = require('express');
-const config = require('config');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors'); // for cross-orign requests
 // third-party middleware to secure the app by setting various http headers
 const helmet = require('helmet');
-// morgan module for logging purposes
-
-
 // to view only the startup debugging
 // set DEBUG=app:startup
 // set DEBUG=app:db
@@ -20,29 +18,12 @@ const helmet = require('helmet');
 // or
 // set DEBUG=app:*
 // DEBUG=app:db nodemon app.js 
-const dbDebugger = require('debug')('app:db');
 const debug = require('debug')('app:starting');
-
-
-const logger = require('./middleware/logger');
-const authentication = require('./middleware/authentication');
-
-const genres = require('./routes/genres');
-const customers = require('./routes/customers');
-const home = require('./routes/home');
-const rentals = require('./routes/rentals');
-const movies = require('./routes/movies');
-
-// 2 Create an instance of all the imports
-
 // express instance
 const app = module.exports = express(); 
 
-mongoose.connect('mongodb://localhost/vidly', { useNewUrlParser: true })
-    .then( () => dbDebugger('Connected to MongoDB 😍😍😍 ...') )
-    .catch( err => dbDebugger('Could not connect to MongoDB 🤎.............', err) );
 
-
+// morgan module for logging purposes
 const morgan = require('morgan');
 
 app.set('view engine', 'pug');
@@ -67,12 +48,6 @@ app.use(express.urlencoded({ extended: true})); // key=value&key=value
 app.use(helmet()); // it is a function helmet();
 
 
-// Configuration
-debug('Application name : '+ config.get('name'));
-debug('Mail Server : ' + config.get('mail.host'));
-//get the pass from environment variable for the mail server password 
-// debug('Mail Password : ' + config.get('mail.password'));
-
 
 // not in production just in development
 if(app.get('env') === 'development') {
@@ -85,19 +60,17 @@ if(app.get('env') === 'development') {
 app.use(express.static('public'));
 app.use(cors());
 
-// custom middelware in a seperate module
-app.use(logger);
-app.use(authentication);
+
+// Authentication
+// Authorization
+// Register: POST /api/users
+// Login: POST /api/logins
 
 
-// 3 routes handler
-app.use('/api/movies', movies)
-app.use('/api/rentals', rentals);
-app.use('/api/genres', genres);
-app.use('/api/customers', customers);
-app.use('/', home);
-
-
+// routes  db logging middleware
+require('./startup/logging');
+require('./startup/routes')(app);
+require('./startup/db')();
 
 // 4 the last thing to do
 //to set the env variable use the command set PORT = 5000

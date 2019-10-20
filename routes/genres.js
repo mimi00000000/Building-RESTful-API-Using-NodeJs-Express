@@ -1,12 +1,17 @@
 const { Genre, validateGenre } = require('../models/genre');
 const express = require('express');
 const router = express.Router();
+const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
 
 
-router.get("/", async (req, res) => {    
+router.get("/", async (req, res, next) => {    
     Genre.find(function (err, genres) {
         if(err) {
-            return res.status(404).send(err.message);
+            // something failed
+            // 500 Internal Server Error
+            console.log('something failed, 500 Internal Server Error');
+            next(err);
         }
         res.send(genres);
     })
@@ -23,7 +28,7 @@ router.get("/:id", async (req, res) => {
 });
 
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
     const { error } = validateGenre(req.body); // ES6 object distructuring feature
     if (error) return res.status(400).send(error.details[0].message); // 400 - bad request
 
@@ -52,8 +57,8 @@ router.put('/:id', async (req, res) => {
         }); 
 });
 
-
-router.delete('/:id', async (req, res) => {
+// [auth, admin] authentification and authorization middlewares 
+router.delete('/:id', [auth, admin], async (req, res) => {
     // look up the genre 
     // if not existing, return 404 - not found
     const genre = await Genre.findByIdAndDelete(req.params.id, function(err, genre) {
