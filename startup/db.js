@@ -4,6 +4,8 @@ const config = require('config');
 
 module.exports = function() {
     const dbstring = config.get('db');
-    mongoose.connect(dbstring, { useNewUrlParser: true })
+    mongoose.connect(dbstring, { 
+     useCreateIndex: true,
+        useNewUrlParser: true })
         .then(() => winston.info(`Connected to MongoDB 😍😍😍... ${dbstring}`))
 }

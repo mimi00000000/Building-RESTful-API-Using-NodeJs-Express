@@ -1,5 +1,4 @@
 const config = require('config');
-
 const debug = require('debug')('app:starting');
 
 module.exports = function() {
