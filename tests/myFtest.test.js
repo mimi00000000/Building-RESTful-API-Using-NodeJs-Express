@@ -152,4 +152,6 @@ describe('fizzBuzz', () => {
 
 
 // a mock function or a fake function
+// toHavebeenCalled()
+// toHaveBeenCalledWith('a', '...')
 
