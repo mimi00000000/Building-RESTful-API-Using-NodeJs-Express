@@ -6,6 +6,7 @@ module.exports = function() {
     const dbstring = config.get('db');
     mongoose.connect(dbstring, { 
      useCreateIndex: true,
-        useNewUrlParser: true })
+        useNewUrlParser: true,
+        useUnifiedTopology: true  })
         .then(() => winston.info(`Connected to MongoDB 😍😍😍... ${dbstring}`))
 }
