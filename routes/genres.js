@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
+const validateObjectId = require('../middleware/validateObjectId');
 
 
 router.get("/", async (req, res, next) => {    
@@ -17,7 +18,7 @@ router.get("/", async (req, res, next) => {
     })
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", validateObjectId, async (req, res) => {
     // const genre = await Genre.findById(req.params.id);
     Genre.findById(req.params.id, function (err, genre) { 
         if(err) {
@@ -38,7 +39,7 @@ router.post('/', auth, async (req, res) => {
 });
 
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', validateObjectId, async (req, res) => {
     // validate 
     // if invalid, return 400 - bad request
     const { error } = validateGenre(req.body); // ES6 object distructuring feature
@@ -50,7 +51,7 @@ router.put('/:id', async (req, res) => {
     await Genre.findByIdAndUpdate(req.params.id, 
         { name: req.body.name }, { new: true }, function (err, genre) {
             if(err) {
-                if (!genre) res.status(404).send(`The genre with the id ${req.params.id} was not found`); 
+                if (!genre) res.status().send(`The genre with the id ${req.params.id} was not found`); 
             }
             // Return the updated genre
             res.send(genre);
@@ -58,7 +59,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // [auth, admin] authentification and authorization middlewares 
-router.delete('/:id', [auth, admin], async (req, res) => {
+router.delete('/:id', [validateObjectId, auth, admin], async (req, res) => {
     // look up the genre 
     // if not existing, return 404 - not found
     await Genre.findByIdAndDelete(req.params.id, function(err, genre) {
