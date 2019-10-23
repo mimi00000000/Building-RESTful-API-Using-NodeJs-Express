@@ -7,7 +7,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors'); // for cross-orign requests
 // third-party middleware to secure the app by setting various http headers
-const helmet = require('helmet');
 const config = require('config');
 // to view only the startup debugging
 // set DEBUG=app:startup
@@ -57,8 +56,13 @@ app.use(cors());
 // Login: POST /api/logins
 // routes  db logging middleware
 // require('./startup/logging');
+
 require('./startup/routes')(app);
 require('./startup/db')();
+require('./startup/config');
+require('./startup/prod')(app);
+require('./startup/logging');
+
 // 4 the last thing to do
 //to set the env variable use the command set PORT = 5000
 const port = process.env.PORT || 3000;
