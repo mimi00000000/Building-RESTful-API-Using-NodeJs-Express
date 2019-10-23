@@ -14,6 +14,7 @@ const moment = require('moment');
 const request = require('supertest');
 const { Rental } = require('../../models/rental');
 const { User } = require('../../models/user');
+const { Movie } = require('../../models/movie');
 mongoose = require('mongoose');
 
 
@@ -22,6 +23,7 @@ describe('/api/returns', () => {
     let customerId;
     let rental;
     let token; 
+    let movie;
 
     const exec = () => {
        return request(server)
@@ -49,6 +51,15 @@ describe('/api/returns', () => {
             }
         });
         await rental.save();
+
+        movie = new Movie({
+            _id : movieId,
+            title: 'amovieTitle',
+            dailyRentalRate: 2,
+            genre: { name: '12345'},
+            numberInStock : 10
+        });
+        await movie.save();
     });
 
     afterEach(async () => {
