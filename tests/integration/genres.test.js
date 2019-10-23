@@ -7,7 +7,7 @@ describe('/api/genres', () => {
 
     beforeEach(() => { server = require('../../app'); });
     afterEach(async() => { 
-        server.close();
+        await server.close();
         //await Genre.deleteMany({}); 
     });
 
@@ -67,7 +67,6 @@ describe('/api/genres', () => {
             token = new User().genrateAuthToken();
             name = 'genre1';
         });
-
 
         it('Should return 401 if client is not logged in', async () => {
             token ='';
