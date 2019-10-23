@@ -50,12 +50,6 @@ if(app.get('env') === 'development') {
 app.use(express.static('public'));
 app.use(cors());
 
-// Authentication
-// Authorization
-// Register: POST /api/users
-// Login: POST /api/logins
-// routes  db logging middleware
-// require('./startup/logging');
 
 require('./startup/routes')(app);
 require('./startup/db')();
